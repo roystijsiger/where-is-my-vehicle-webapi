@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using WhereIsMyVehicle.WebApi.Helpers;
+using WhereIsMyVehicle.WebApi.Services;
+using Microsoft.EntityFrameworkCore;
+using WhereIsMyVehicle.WebApi.Models;
 
 namespace WhereIsMyVehicle.WebApi
 {
@@ -56,6 +59,9 @@ namespace WhereIsMyVehicle.WebApi
             });
             
             services.AddScoped<IUserService, UserService>();
+
+            services.AddDbContext<WhereIsMyVehicleDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("WhereIsMyVehicleDbContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
