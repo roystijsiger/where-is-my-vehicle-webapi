@@ -12078,11 +12078,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle\\WhereIsMyVehicle.WebApi\\WhereIsMyVehicle.WebApi.csproj",
+      "projectUniqueName": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle.WebApi\\WhereIsMyVehicle.WebApi.csproj",
       "projectName": "WhereIsMyVehicle.WebApi",
-      "projectPath": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle\\WhereIsMyVehicle.WebApi\\WhereIsMyVehicle.WebApi.csproj",
+      "projectPath": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle.WebApi\\WhereIsMyVehicle.WebApi.csproj",
       "packagesPath": "C:\\Users\\Andreas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle\\WhereIsMyVehicle.WebApi\\obj\\",
+      "outputPath": "C:\\Users\\Andreas\\Documents\\Sources\\where-is-my-vehicle-webapi\\WhereIsMyVehicle.WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
