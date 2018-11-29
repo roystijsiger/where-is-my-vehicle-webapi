@@ -11,7 +11,7 @@ namespace WhereIsMyVehicle.WebApi.Models
         public VehicleType Type { get; set; }
         public string Color { get; set; }
         public string LicencePlate { get; set; }
-        public Location Location { get; set; }
+        public GeoLocation Location { get; set; }
 
         public List<Sighting> Sightings { get; set; }
     }
