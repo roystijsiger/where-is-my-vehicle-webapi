@@ -19,7 +19,7 @@ namespace WhereIsMyVehicle.WebApi.Services
         private List<User> _users = new List<User>
         {
             new User {
-
+                Email = "rs@gmail.com", Password = "admin123"
             }
         };
 

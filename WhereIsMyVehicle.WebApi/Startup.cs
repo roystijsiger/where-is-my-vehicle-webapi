@@ -16,6 +16,8 @@ using WhereIsMyVehicle.WebApi.Helpers;
 using WhereIsMyVehicle.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
 using WhereIsMyVehicle.WebApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace WhereIsMyVehicle.WebApi
 {
@@ -36,6 +38,12 @@ namespace WhereIsMyVehicle.WebApi
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+
+            // Configure swaggeer
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Where is my vehicle", Version = "v1" });
+            });
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
@@ -73,7 +81,12 @@ namespace WhereIsMyVehicle.WebApi
             }
 
             app.UseMvc();
+            app.UseSwagger();
 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Where is my vehicle");
+            });
         }
     }
 }
