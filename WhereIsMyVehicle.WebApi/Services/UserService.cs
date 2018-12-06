@@ -16,11 +16,10 @@ namespace WhereIsMyVehicle.WebApi.Services
     {
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
+        private readonly List<User> _users = new List<User>
         {
-            new User {
-                Email = "rs@gmail.com", Password = "admin123"
-            }
+            new User("roy@example.com", "test123"),
+            new User("andreas@example.com", "test123")
         };
 
         private readonly AppSettings _appSettings;
@@ -45,9 +44,9 @@ namespace WhereIsMyVehicle.WebApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(365),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

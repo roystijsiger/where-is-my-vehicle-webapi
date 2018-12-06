@@ -15,7 +15,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(IUserService userService)
         {
@@ -23,8 +23,8 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]User userParam)
+        [HttpPost]
+        public IActionResult Token([FromBody]User userParam)
         {
             var user = _userService.Authenticate(userParam.Email, userParam.Password);
 
