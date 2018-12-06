@@ -26,14 +26,14 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sighting>>> GetSighting()
         {
-            return await _context.Sighting.ToListAsync();
+            return await _context.Sightings.ToListAsync();
         }
 
         // GET: api/Sightings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Sighting>> GetSighting(int id)
         {
-            var sighting = await _context.Sighting.FindAsync(id);
+            var sighting = await _context.Sightings.FindAsync(id);
 
             if (sighting == null)
             {
@@ -77,7 +77,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Sighting>> PostSighting(Sighting sighting)
         {
-            _context.Sighting.Add(sighting);
+            _context.Sightings.Add(sighting);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSighting", new { id = sighting.Id }, sighting);
@@ -87,13 +87,13 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Sighting>> DeleteSighting(int id)
         {
-            var sighting = await _context.Sighting.FindAsync(id);
+            var sighting = await _context.Sightings.FindAsync(id);
             if (sighting == null)
             {
                 return NotFound();
             }
 
-            _context.Sighting.Remove(sighting);
+            _context.Sightings.Remove(sighting);
             await _context.SaveChangesAsync();
 
             return sighting;
@@ -101,7 +101,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         private bool SightingExists(int id)
         {
-            return _context.Sighting.Any(e => e.Id == id);
+            return _context.Sightings.Any(e => e.Id == id);
         }
     }
 }

@@ -24,16 +24,31 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Vehicles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicle()
+        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
         {
-            return await _context.Vehicle.ToListAsync();
+            return await _context.Vehicles.ToListAsync();
         }
+
+        // GET: api/Vehicles?radius= 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles([FromQuery] double currentLatitude, [FromQuery] double currentLongitude, [FromQuery] int radius)
+        {
+            throw new NotImplementedException();
+            //return await _context.Vehicles
+            //    .Where(v =>
+            //    {
+            //        return v.Location.Equals(new GeoLocation(currentLatitude, currentLongitude));
+            //    })
+            //.ToListAsync();
+        }
+
+
 
         // GET: api/Vehicles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
 
             if (vehicle == null)
             {
@@ -77,7 +92,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
-            _context.Vehicle.Add(vehicle);
+            _context.Vehicles.Add(vehicle);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetVehicle", new { id = vehicle.Id }, vehicle);
@@ -87,13 +102,13 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Vehicle>> DeleteVehicle(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle == null)
             {
                 return NotFound();
             }
 
-            _context.Vehicle.Remove(vehicle);
+            _context.Vehicles.Remove(vehicle);
             await _context.SaveChangesAsync();
 
             return vehicle;
@@ -101,7 +116,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicle.Any(e => e.Id == id);
+            return _context.Vehicles.Any(e => e.Id == id);
         }
     }
 }

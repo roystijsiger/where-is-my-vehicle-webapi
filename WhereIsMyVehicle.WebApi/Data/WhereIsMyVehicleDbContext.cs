@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using WhereIsMyVehicle.WebApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace WhereIsMyVehicle.WebApi.Models
 {
@@ -14,8 +9,8 @@ namespace WhereIsMyVehicle.WebApi.Models
         {
         }
 
-        public DbSet<WhereIsMyVehicle.WebApi.Models.Vehicle> Vehicle { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
 
-        public DbSet<WhereIsMyVehicle.WebApi.Models.Sighting> Sighting { get; set; }
+        public DbSet<Sighting> Sightings { get; set; }
     }
 }
