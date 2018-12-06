@@ -17,7 +17,7 @@ using WhereIsMyVehicle.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
 using WhereIsMyVehicle.WebApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
-
+using Microsoft.AspNetCore.Routing;
 
 namespace WhereIsMyVehicle.WebApi
 {
@@ -38,6 +38,11 @@ namespace WhereIsMyVehicle.WebApi
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+            services.Configure<RouteOptions>(options => 
+            {
+                options.LowercaseUrls = true;
+            });
+
 
             // Configure swaggeer
             services.AddSwaggerGen(c =>
