@@ -10,7 +10,7 @@ using WhereIsMyVehicle.WebApi.Models;
 
 namespace WhereIsMyVehicle.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     [Authorize]
     public class SightingsController : ControllerBase
