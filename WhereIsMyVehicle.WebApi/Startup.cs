@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,6 +80,7 @@ namespace WhereIsMyVehicle.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            // TODO: Maybe switch to mvc core?
             app.UseMvc();
             app.UseSwagger();
 
