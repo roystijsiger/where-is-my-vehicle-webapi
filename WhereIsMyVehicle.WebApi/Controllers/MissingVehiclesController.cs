@@ -13,11 +13,11 @@ namespace WhereIsMyVehicle.WebApi.Controllers
     [Route("[controller]")]
     [ApiController]
     [Authorize]
-    public class VehiclesController : ControllerBase
+    public class MissingVehiclesController : ControllerBase
     {
         private readonly WhereIsMyVehicleDbContext _context;
 
-        public VehiclesController(WhereIsMyVehicleDbContext context)
+        public MissingVehiclesController(WhereIsMyVehicleDbContext context)
         {
             _context = context;
         }
