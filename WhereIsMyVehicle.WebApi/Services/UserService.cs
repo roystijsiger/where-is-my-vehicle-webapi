@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using WhereIsMyVehicle.WebApi.Data;
 using WhereIsMyVehicle.WebApi.Helpers;
 using WhereIsMyVehicle.WebApi.Models;
 
@@ -15,23 +17,19 @@ namespace WhereIsMyVehicle.WebApi.Services
     public class UserService : IUserService
     {
 
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private readonly List<User> _users = new List<User>
-        {
-            new User("roy@example.com", "test123"),
-            new User("andreas@example.com", "test123")
-        };
-
         private readonly AppSettings _appSettings;
+        private readonly WhereIsMyVehicleDbContext _dbContext;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, WhereIsMyVehicleDbContext dbContext)
         {
             _appSettings = appSettings.Value;
+            _dbContext = dbContext;
         }
 
         public User Authenticate(string email, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
+            var user = _dbContext.Users
+                .SingleOrDefault(x => x.Email == email && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -49,6 +47,7 @@ namespace WhereIsMyVehicle.WebApi.Services
                 Expires = DateTime.UtcNow.AddDays(365),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             user.Token = tokenHandler.WriteToken(token);
 
@@ -56,16 +55,6 @@ namespace WhereIsMyVehicle.WebApi.Services
             user.Password = null;
 
             return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            // return users without passwords
-            return _users.Select(x =>
-            {
-                x.Password = null;
-                return x;
-            });
         }
     }
 }

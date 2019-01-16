@@ -16,6 +16,17 @@ namespace WhereIsMyVehicle.WebApi.Extensions.Configuration
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(settings.Version, new Info { Title = settings.Name, Version = settings.Version });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme {
+                    In = "header",
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                    { "Bearer", Enumerable.Empty<string>() },
+                });
             });
 
             return services;
