@@ -25,7 +25,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Sightings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sighting>>> GetSighting()
+        public async Task<ActionResult<IEnumerable<Sighting>>> GetSightings()
         {
             return await _context.Sightings.ToListAsync();
         }
@@ -65,10 +65,8 @@ namespace WhereIsMyVehicle.WebApi.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+            
+                throw;
             }
 
             return NoContent();

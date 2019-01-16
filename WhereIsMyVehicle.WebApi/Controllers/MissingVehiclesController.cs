@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhereIsMyVehicle.WebApi.Data;
+using WhereIsMyVehicle.WebApi.Helpers;
 using WhereIsMyVehicle.WebApi.Models;
 
 namespace WhereIsMyVehicle.WebApi.Controllers
@@ -25,25 +26,10 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Vehicles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
+        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles([FromBody] VehicleFilters filters)
         {
             return await _context.Vehicles.ToListAsync();
         }
-
-        // GET: api/Vehicles?radius= 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles([FromQuery] double currentLatitude, [FromQuery] double currentLongitude, [FromQuery] int radius)
-        {
-            throw new NotImplementedException();
-            //return await _context.Vehicles
-            //    .Where(v =>
-            //    {
-            //        return v.Location.Equals(new GeoLocation(currentLatitude, currentLongitude));
-            //    })
-            //.ToListAsync();
-        }
-
-
 
         // GET: api/Vehicles/5
         [HttpGet("{id}")]
