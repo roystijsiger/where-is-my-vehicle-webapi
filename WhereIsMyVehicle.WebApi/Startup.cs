@@ -18,81 +18,55 @@ using Microsoft.EntityFrameworkCore;
 using WhereIsMyVehicle.WebApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Routing;
+using WhereIsMyVehicle.WebApi.Data;
+using WhereIsMyVehicle.WebApi.Extensions.Configuration;
 
 namespace WhereIsMyVehicle.WebApi
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+        
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            services.Configure<RouteOptions>(options => 
-            {
-                options.LowercaseUrls = true;
-            });
-
-
-            // Configure swaggeer
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Where is my vehicle", Version = "v1" });
-            });
-
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            // configure strongly typed settings object
+            var settingConfigurationSection = _configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(settingConfigurationSection);
             
-            services.AddScoped<IUserService, UserService>();
+            var appSettings = settingConfigurationSection.Get<AppSettings>();
 
-            services.AddDbContext<WhereIsMyVehicleDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("WhereIsMyVehicleDbContext")));
+            // Configure basic routing for project
+            services.ConfigureMvc(appSettings);
+
+            // Configure an in memory database
+            services.ConfigureDatabase(appSettings);
+
+            // Configure app authentication
+            services.ConfigureAuthentication(appSettings);
+
+            // Configure generation of swagger.json
+            services.ConfigureSwagger(appSettings);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var appSettings = _configuration.GetSection("AppSettings").Get<AppSettings>();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // TODO: Maybe switch to mvc core?
             app.UseMvc();
-            app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Where is my vehicle");
-            });
+            app.ConfigureSwagger(appSettings);
         }
     }
 }

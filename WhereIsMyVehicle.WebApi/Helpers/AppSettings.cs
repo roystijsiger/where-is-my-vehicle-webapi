@@ -7,6 +7,9 @@ namespace WhereIsMyVehicle.WebApi.Helpers
 {
     public class AppSettings
     {
+        public string Name { get; set; }
+        public string Version { get; set; }
         public string Secret { get; set; }
+        public string DatabaseName { get; set; }
     }
 }

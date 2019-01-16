@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WhereIsMyVehicle.WebApi.Data;
 using WhereIsMyVehicle.WebApi.Models;
 
 namespace WhereIsMyVehicle.WebApi.Controllers
