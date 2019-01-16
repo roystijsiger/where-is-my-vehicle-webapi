@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WhereIsMyVehicle.WebApi.Models;
 
-namespace WhereIsMyVehicle.WebApi.Models
+namespace WhereIsMyVehicle.WebApi.Data
 {
     public class WhereIsMyVehicleDbContext : DbContext
     {

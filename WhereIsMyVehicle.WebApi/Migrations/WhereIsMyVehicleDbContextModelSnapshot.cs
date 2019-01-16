@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WhereIsMyVehicle.WebApi.Data;
 using WhereIsMyVehicle.WebApi.Models;
 
 namespace WhereIsMyVehicle.WebApi.Migrations
