@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -65,6 +66,13 @@ namespace WhereIsMyVehicle.WebApi
             }
 
             app.UseMvc();
+
+            var redirectOptions = new RewriteOptions();
+
+            // Redirect homepage to github of android app
+            redirectOptions.AddRedirect("^$", "https://github.com/roystijsiger/where-is-my-vehicle-android");
+            
+            app.UseRewriter(redirectOptions);
 
             app.ConfigureSwagger(appSettings);
         }
