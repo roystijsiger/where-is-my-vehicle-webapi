@@ -64,7 +64,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("token")]
+        [HttpPost("authenticate")]
         public IActionResult Token([FromBody]CredentialsModel credentials)
         {
             try

@@ -15,7 +15,7 @@ namespace WhereIsMyVehicle.WebApi.Models
         public string Password { get; set; }
         public string Token { get; set; }
 
-        public string AvatarUrl => $"https://www.gravatar.com/avatar/{Email.CalculateMd5Hash()}";
+        public string AvatarUrl => $"https://www.gravatar.com/avatar/{Email.CalculateMd5Hash()}?d=retro";
 
         public User()
         {

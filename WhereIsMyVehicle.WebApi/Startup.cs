@@ -65,6 +65,7 @@ namespace WhereIsMyVehicle.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.ConfigureAuthentication(appSettings);
             app.UseMvc();
 
             var redirectOptions = new RewriteOptions();
