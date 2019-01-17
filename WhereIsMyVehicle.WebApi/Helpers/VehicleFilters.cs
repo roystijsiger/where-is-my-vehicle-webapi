@@ -8,6 +8,8 @@ namespace WhereIsMyVehicle.WebApi.Helpers
 {
     public class VehicleFilters
     {
-        public GeoLocation GeoLocation { get; set; }
+        public double Latitude{ get; set; }
+        public double Longitude { get; set; }
+        public int Distance { get; set; }
     }
 }
