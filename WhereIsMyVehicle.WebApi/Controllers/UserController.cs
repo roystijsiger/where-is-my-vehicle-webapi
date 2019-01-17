@@ -31,7 +31,6 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         {
             var users = _dbContext.Users.Select(x => new User
                 {
-                    Id = x.Id,
                     Email = x.Email
                 }
             );
@@ -43,16 +42,18 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser([FromBody]CredentialsModel credentials)
         {
+            if (credentials.Password.Length < 6)
+                return BadRequest("Password requirements did not match. Minimum of 6 characters is required.");
+
             try
             {
                 new MailAddress(credentials.Email);
-
-                if (credentials.Password.Length < 6) throw new ArgumentException("password");
             }
             catch (Exception)
             {
-                return BadRequest();
+                return BadRequest("Email is not valid.");
             }
+
 
             var user = _dbContext.Users.Add(new User(credentials.Email, credentials.Password)).Entity;
             await _dbContext.SaveChangesAsync();
@@ -72,7 +73,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
             }
             catch (Exception)
             {
-                return BadRequest();
+                return BadRequest("Email is not valid.");
             }
 
             var user = _userService.Authenticate(credentials.Email, credentials.Password);
