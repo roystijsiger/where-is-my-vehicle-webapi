@@ -26,6 +26,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Vehicles
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles([FromQuery] VehicleFilters filters)
         {
             return await _context.Vehicles.ToListAsync();
@@ -33,6 +34,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Vehicles/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         {
             var vehicle = await _context.Vehicles.FindAsync(id);

@@ -25,6 +25,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Sightings
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Sighting>>> GetSightings()
         {
             return await _context.Sightings.ToListAsync();
@@ -32,6 +33,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // GET: api/Sightings/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Sighting>> GetSighting(int id)
         {
             var sighting = await _context.Sightings.FindAsync(id);
@@ -46,6 +48,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // PUT: api/Sightings/5
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> PutSighting(int id, Sighting sighting)
         {
             if (id != sighting.Id)
@@ -74,6 +77,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
         // POST: api/Sightings
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Sighting>> PostSighting(Sighting sighting)
         {
             _context.Sightings.Add(sighting);

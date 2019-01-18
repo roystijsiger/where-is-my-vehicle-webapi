@@ -1,4 +1,4 @@
-﻿namespace WhereIsMyVehicle.WebApi.Controllers
+﻿namespace WhereIsMyVehicle.WebApi.Models
 {
     public class CredentialsModel
     {
