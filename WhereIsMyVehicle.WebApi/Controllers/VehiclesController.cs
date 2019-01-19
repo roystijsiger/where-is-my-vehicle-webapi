@@ -115,7 +115,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         }
 
         // POST: api/vehicles/1/sightings
-        [HttpPost("{vehicleId}/sightings/{sightingId}")]
+        [HttpPost("{vehicleId}/sightings")]
         [AllowAnonymous]
         public async Task<ActionResult<Sighting>> PostVehicleSighting(int vehicleId, Sighting sighting)
         {
@@ -124,6 +124,11 @@ namespace WhereIsMyVehicle.WebApi.Controllers
             if (vehicle == null)
             {
                 return BadRequest("No vehicle available with the provided id");
+            }
+
+            if (vehicle.Sightings == null)
+            {
+                vehicle.Sightings = new List<Sighting>();
             }
 
             vehicle.Sightings.Add(sighting);
