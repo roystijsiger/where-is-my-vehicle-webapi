@@ -22,89 +22,12 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Sightings
+        
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Sighting>>> GetSightings()
         {
             return await _context.Sightings.ToListAsync();
-        }
-
-        // GET: api/Sightings/5
-        [HttpGet("{id}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<Sighting>> GetSighting(int id)
-        {
-            var sighting = await _context.Sightings.FindAsync(id);
-
-            if (sighting == null)
-            {
-                return NotFound();
-            }
-
-            return sighting;
-        }
-
-        // PUT: api/Sightings/5
-        [HttpPut("{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> PutSighting(int id, Sighting sighting)
-        {
-            if (id != sighting.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(sighting).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SightingExists(id))
-                {
-                    return NotFound();
-                }
-            
-                throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Sightings
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult<Sighting>> PostSighting(Sighting sighting)
-        {
-            _context.Sightings.Add(sighting);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSighting", new { id = sighting.Id }, sighting);
-        }
-
-        // DELETE: api/Sightings/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Sighting>> DeleteSighting(int id)
-        {
-            var sighting = await _context.Sightings.FindAsync(id);
-            if (sighting == null)
-            {
-                return NotFound();
-            }
-
-            _context.Sightings.Remove(sighting);
-            await _context.SaveChangesAsync();
-
-            return sighting;
-        }
-
-        private bool SightingExists(int id)
-        {
-            return _context.Sightings.Any(e => e.Id == id);
         }
     }
 }

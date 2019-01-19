@@ -68,10 +68,9 @@ namespace WhereIsMyVehicle.WebApi.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+             
+                throw;
+                
             }
 
             return NoContent();
@@ -86,6 +85,76 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
             return CreatedAtAction("GetVehicle", new { id = vehicle.Id }, vehicle);
         }
+
+   
+        [AllowAnonymous]
+        [HttpGet("{vehicleId}/sightings")]
+        public ActionResult<IEnumerable<Sighting>> GetVehicleSightings(int vehicleId)
+        {
+            return _context.Vehicles
+                .SingleOrDefault(v => v.Id == vehicleId)?
+                .Sightings;
+        }
+
+        // GET: api/vehicles/1/sightings/5
+        [HttpGet("{vehicleId}/sightings/{sightingId}")]
+        [AllowAnonymous]
+        public ActionResult<Sighting> GetVehicleSighting(int vehicleId, int sightingId)
+        {
+            var sighting = _context.Vehicles
+                .SingleOrDefault(v => v.Id == vehicleId)?
+                .Sightings
+                .SingleOrDefault(s => s.Id == sightingId);
+
+            if (sighting == null)
+            {
+                return NotFound();
+            }
+
+            return sighting;
+        }
+
+        // POST: api/vehicles/1/sightings
+        [HttpPost("{vehicleId}/sightings/{sightingId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Sighting>> PostVehicleSighting(int vehicleId, Sighting sighting)
+        {
+            var vehicle = _context.Vehicles.SingleOrDefault(v => v.Id == vehicleId);
+
+            if (vehicle == null)
+            {
+                return BadRequest("No vehicle available with the provided id");
+            }
+
+            vehicle.Sightings.Add(sighting);
+
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetVehicleSighting", new { vehicleId = vehicle.Id, sightingId = sighting.Id }, sighting);
+        }
+
+        // DELETE: api/vehicles/1/sightings/5
+//        [HttpDelete("{vehicleId}/sightings/{sightingId}")]
+//        public async Task<ActionResult<Sighting>> DeleteVehicleSighting(int vehicleId, int sightingId)
+//        {
+//            var vehicle = _context.Vehicles.SingleOrDefault(v => v.Id == vehicleId);
+//
+//            if (vehicle == null)
+//            {
+//                return BadRequest("No vehicle available with the provided id");
+//            }
+//
+//            var sighting = vehicle.Sightings.Find(s => s.Id == sightingId);
+//            if (sighting == null)
+//            {
+//                return NotFound();
+//            }
+//
+//            _context.Sightings.Remove(sighting);
+//            await _context.SaveChangesAsync();
+//
+//            return sighting;
+//        }
 
         // DELETE: api/Vehicles/5
         [HttpDelete("{id}")]
