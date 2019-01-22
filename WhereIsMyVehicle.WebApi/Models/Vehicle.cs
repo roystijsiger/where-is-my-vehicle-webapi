@@ -21,6 +21,7 @@ namespace WhereIsMyVehicle.WebApi.Models
         public double LastKnownLatitude { get; set; }
         public double LastKnownLongitude { get; set; }
 
+        public virtual User User { get; set; }
         public virtual List<Sighting> Sightings { get; set; }
     }
 }

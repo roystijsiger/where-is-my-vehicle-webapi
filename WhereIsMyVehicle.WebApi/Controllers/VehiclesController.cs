@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WhereIsMyVehicle.WebApi.Data;
@@ -29,15 +29,15 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles([FromQuery] VehicleFilters filters)
         {
-            return await _context.Vehicles.ToListAsync();
+            return await _context.Vehicles.Include(v => v.User).ToListAsync();
         }
 
         // GET: api/Vehicles/5
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Vehicle>> GetVehicle(int id)
+        public ActionResult<Vehicle> GetVehicle(int id)
         {
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = _context.Vehicles.Include(v => v.User).SingleOrDefault(v => v.Id == id);
 
             if (vehicle == null)
             {
@@ -47,39 +47,16 @@ namespace WhereIsMyVehicle.WebApi.Controllers
             return vehicle;
         }
 
-        // PUT: api/Vehicles/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutVehicle(int id, Vehicle vehicle)
-        {
-            if (id != vehicle.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(vehicle).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VehicleExists(id))
-                {
-                    return NotFound();
-                }
-             
-                throw;
-                
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Vehicles
         [HttpPost]
         public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
         {
+            var user = _context.Users.SingleOrDefault(u => u.Email == GetCurrentUserEmail());
+
+            if (user == null) return Unauthorized();
+
+            vehicle.User = user;
+
             _context.Vehicles.Add(vehicle);
             await _context.SaveChangesAsync();
 
@@ -89,21 +66,47 @@ namespace WhereIsMyVehicle.WebApi.Controllers
    
         [AllowAnonymous]
         [HttpGet("{vehicleId}/sightings")]
-        public ActionResult<IEnumerable<Sighting>> GetVehicleSightings(int vehicleId)
+        public ActionResult<IEnumerable<Sighting>> GetVehicleSightingsAsync(int vehicleId)
         {
-            return _context.Vehicles
-                .SingleOrDefault(v => v.Id == vehicleId)?
-                .Sightings;
+            var vehicle = _context.Vehicles
+                .Include(v => v.User)
+                .Include(v => v.Sightings)
+                .SingleOrDefault(v => v.Id == vehicleId);
+
+            if (vehicle == null)
+            {
+                return BadRequest();
+            }
+
+            if (vehicle.User.Email != GetCurrentUserEmail())
+            {
+                return Unauthorized();
+            }
+
+            return Ok(vehicle.Sightings);
         }
 
         // GET: api/vehicles/1/sightings/5
         [HttpGet("{vehicleId}/sightings/{sightingId}")]
         [AllowAnonymous]
-        public ActionResult<Sighting> GetVehicleSighting(int vehicleId, int sightingId)
+        public ActionResult<Sighting> GetVehicleSightingAsync(int vehicleId, int sightingId)
         {
-            var sighting = _context.Vehicles
-                .SingleOrDefault(v => v.Id == vehicleId)?
-                .Sightings
+            var vehicle = _context.Vehicles
+                .Include(v => v.User)
+                .Include(v => v.Sightings)
+                .SingleOrDefault(v => v.Id == vehicleId);
+
+            if (vehicle == null)
+            {
+                return BadRequest();
+            }
+
+            if (vehicle.User.Email != GetCurrentUserEmail())
+            {
+                return Unauthorized();
+            }
+
+            var sighting = vehicle.Sightings
                 .SingleOrDefault(s => s.Id == sightingId);
 
             if (sighting == null)
@@ -135,31 +138,8 @@ namespace WhereIsMyVehicle.WebApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVehicleSighting", new { vehicleId = vehicle.Id, sightingId = sighting.Id }, sighting);
+            return StatusCode(201);
         }
-
-        // DELETE: api/vehicles/1/sightings/5
-//        [HttpDelete("{vehicleId}/sightings/{sightingId}")]
-//        public async Task<ActionResult<Sighting>> DeleteVehicleSighting(int vehicleId, int sightingId)
-//        {
-//            var vehicle = _context.Vehicles.SingleOrDefault(v => v.Id == vehicleId);
-//
-//            if (vehicle == null)
-//            {
-//                return BadRequest("No vehicle available with the provided id");
-//            }
-//
-//            var sighting = vehicle.Sightings.Find(s => s.Id == sightingId);
-//            if (sighting == null)
-//            {
-//                return NotFound();
-//            }
-//
-//            _context.Sightings.Remove(sighting);
-//            await _context.SaveChangesAsync();
-//
-//            return sighting;
-//        }
 
         // DELETE: api/Vehicles/5
         [HttpDelete("{id}")]
@@ -169,6 +149,11 @@ namespace WhereIsMyVehicle.WebApi.Controllers
             if (vehicle == null)
             {
                 return NotFound();
+            }
+
+            if (vehicle.User.Email != GetCurrentUserEmail())
+            {
+                return Unauthorized();
             }
 
             _context.Vehicles.Remove(vehicle);
@@ -181,5 +166,9 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         {
             return _context.Vehicles.Any(e => e.Id == id);
         }
+
+        private string GetCurrentUserEmail() => 
+            HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
     }
 }

@@ -43,7 +43,7 @@ namespace WhereIsMyVehicle.WebApi.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Email)
+                    new Claim(ClaimTypes.NameIdentifier, user.Email)
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(365),
