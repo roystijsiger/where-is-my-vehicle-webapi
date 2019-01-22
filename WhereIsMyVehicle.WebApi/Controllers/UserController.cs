@@ -27,6 +27,7 @@ namespace WhereIsMyVehicle.WebApi.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var users = _dbContext.Users.Select(x => new User

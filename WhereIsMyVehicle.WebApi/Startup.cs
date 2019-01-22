@@ -46,7 +46,7 @@ namespace WhereIsMyVehicle.WebApi
             services.ConfigureMvc(appSettings);
 
             // Configure an in memory database
-            services.ConfigureDatabase(appSettings);
+            services.ConfigureDatabase(appSettings, _configuration);
 
             // Configure app authentication
             services.ConfigureAuthentication(appSettings);
