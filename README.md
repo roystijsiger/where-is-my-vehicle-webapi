@@ -1,6 +1,7 @@
 # Where is my vehicle
 ## Web API
 **This project provides a RESTfull webapi used in [Where is my vehicle Android](https://github.com/roystijsiger/where-is-my-vehicle-android).**
+### [Swagger docs](http://whereismyvehicle.azurewebsites.net/swagger/index.html)
 
 ### Development instructions
 - Install [Visual Studio 2017](https://visualstudio.microsoft.com/vs/)
